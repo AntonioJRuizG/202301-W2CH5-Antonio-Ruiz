@@ -1,6 +1,6 @@
 # Challenge 5 - semana 2
 
-## Conway Game of Life 🦠
+## Conway Game of Life
 
 Deberás de programar el [Juego de la vida de Conway](https://es.wikipedia.org/wiki/Juego_de_la_vida).
 
