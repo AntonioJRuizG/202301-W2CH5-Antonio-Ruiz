@@ -1,67 +1,81 @@
 const colums = 3;
 const rows = 3;
-const board = [];
+let currentBoard = [];
 
-export function setBoard(board, colums, rows) {
+export function setBoard(twoDimArray, colums, rows) {
   for (let r = 0; r < rows; r++) {
     const row = [];
     for (let c = 0; c < colums; c++) {
       row.push(0);
     }
 
-    board.push(row);
+    twoDimArray.push(row);
   }
 
-  return board;
+  return twoDimArray;
 }
 
-setBoard(board, colums, rows);
+currentBoard = setBoard(currentBoard, colums, rows);
 
-board[2][2] = 1; // Board[row][colum]
+// Rellenar tabla inicial
+/* for (let i = 0; i < currentBoard.length - 1; i++) {
+  for (let j = 0; j < currentBoard.length; j++) {
+    currentBoard[i][j] = 1;
+  }
+} */
 
-console.table(board);
+currentBoard[0][1] = 1;
 
-function countContiguousCells(board) {
-  let cellsCounter = 0;
+console.table(currentBoard);
 
-  const rows = board.length;
-  const cols = board[0].length;
-  const expandedBoard = Array.from(board);
+export function createAuxBoard(biDimArray) {
+  if (biDimArray.length === 0) return false;
+  const rows = biDimArray.length;
+  const cols = biDimArray[0].length;
+  const auxiliarBoard = biDimArray.map((arr) => arr.slice());
   for (let i = 0; i < rows; i++) {
-    expandedBoard[i].push(2);
-    expandedBoard[i].unshift(2);
+    auxiliarBoard[i].push(2);
+    auxiliarBoard[i].unshift(2);
   }
 
-  const expandedRow = [];
+  const auxiliarRow = [];
   for (let i = 0; i < cols + 2; i++) {
-    expandedRow.push(2);
+    auxiliarRow.push(2);
   }
 
-  expandedBoard.push(expandedRow);
-  expandedBoard.unshift(expandedRow);
+  auxiliarBoard.push(auxiliarRow);
+  auxiliarBoard.unshift(auxiliarRow);
 
-  const cellsMatrix = expandedBoard.map((arr) => arr.slice());
+  return auxiliarBoard;
+}
+
+export function countAdjacentCells(biDimArray) {
+  let adjecentCellsCounter = 0;
+  const auxBoard = createAuxBoard(biDimArray);
+  const rows = auxBoard.length - 2;
+  const cols = auxBoard[0].length - 2;
+  const adjacentTotalCellsMatrix = auxBoard.map((arr) => arr.slice());
 
   for (let i = 1; i <= rows; i++) {
     for (let j = 1; j <= cols; j++) {
-      if (expandedBoard[i - 1][j - 1] === 1) cellsCounter++;
+      if (auxBoard[i - 1][j - 1] === 1) adjecentCellsCounter++;
+      if (auxBoard[i - 1][j] === 1) adjecentCellsCounter++;
+      if (auxBoard[i - 1][j + 1] === 1) adjecentCellsCounter++;
+      if (auxBoard[i][j - 1] === 1) adjecentCellsCounter++;
 
-      if (expandedBoard[i - 1][j] === 1) cellsCounter++;
-      if (expandedBoard[i - 1][j + 1] === 1) cellsCounter++;
-      if (expandedBoard[i][j - 1] === 1) cellsCounter++;
+      if (auxBoard[i][j + 1] === 1) adjecentCellsCounter++;
+      if (auxBoard[i + 1][j - 1] === 1) adjecentCellsCounter++;
+      if (auxBoard[i + 1][j] === 1) adjecentCellsCounter++;
+      if (auxBoard[i + 1][j + 1] === 1) adjecentCellsCounter++;
 
-      if (expandedBoard[i][j + 1] === 1) cellsCounter++;
-      if (expandedBoard[i + 1][j - 1] === 1) cellsCounter++;
-      if (expandedBoard[i + 1][j] === 1) cellsCounter++;
-      if (expandedBoard[i + 1][j + 1] === 1) cellsCounter++;
-
-      cellsMatrix[i][j] = cellsCounter;
-      cellsCounter = 0;
+      adjacentTotalCellsMatrix[i][j] = adjecentCellsCounter;
+      adjecentCellsCounter = 0;
     }
   }
 
-  console.table("matrix contador celdas", cellsMatrix);
-  return cellsMatrix;
+  return adjacentTotalCellsMatrix;
 }
 
-console.table(countContiguousCells(board));
+const adjacentCellsCount = countAdjacentCells(currentBoard);
+
+console.table(adjacentCellsCount);
