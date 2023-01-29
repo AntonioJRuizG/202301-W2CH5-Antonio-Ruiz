@@ -1,5 +1,5 @@
-const colums = 10;
-const rows = 10;
+const colums = 70;
+const rows = 60;
 let currentBoard = [];
 
 export function setBoard(colums, rows) {
@@ -20,12 +20,32 @@ function setBoardScreen(array) {
   }
 }
 
-function liveCell(currentBoard) {
+currentBoard = setBoard(colums, rows);
+
+for (let i = 5; i < currentBoard.length; i++) {
+  for (let j = 0; j < currentBoard.length - 3; j++) {
+    currentBoard[i][j] = 1;
+  }
+}
+
+currentBoard[0][0] = 1;
+currentBoard[3][0] = 0;
+
+function liveCell() {
   let position = this.id;
   position = position.split("-");
   const r = position[0];
   const c = position[1];
-  currentBoard[r][c] = 1;
+  if (currentBoard[r][c] === 0) {
+    currentBoard[r][c] = 1;
+    document.getElementById(r + "-" + c).classList.add("aliveCell");
+    console.table(currentBoard);
+    return;
+  }
+
+  currentBoard[r][c] = 0;
+  document.getElementById(r + "-" + c).classList.remove("aliveCell");
+  console.table(currentBoard);
 }
 
 setBoardScreen(boardDisplay);
@@ -106,6 +126,7 @@ export function nextBoard(arrWithAdCellCalculated, currentBoard) {
           arrWithAdCellCalculated[i][j] > 3
         ) {
           resultBoard[i][j] = 0;
+          document.getElementById(i + "-" + j).classList.remove("aliveCell");
         }
 
         if (
@@ -113,14 +134,17 @@ export function nextBoard(arrWithAdCellCalculated, currentBoard) {
           arrWithAdCellCalculated[i][j] === 3
         ) {
           resultBoard[i][j] = 1;
+          document.getElementById(i + "-" + j).classList.add("aliveCell");
         }
       }
 
       if (currentBoard[i][j] === 0) {
         if (arrWithAdCellCalculated[i][j] === 3) {
           resultBoard[i][j] = 1;
+          document.getElementById(i + "-" + j).classList.add("aliveCell");
         } else {
           resultBoard[i][j] = 0;
+          document.getElementById(i + "-" + j).classList.remove("aliveCell");
         }
       }
     }
@@ -129,25 +153,15 @@ export function nextBoard(arrWithAdCellCalculated, currentBoard) {
   return resultBoard;
 }
 
-currentBoard = setBoard(colums, rows);
-
-for (let i = 5; i < currentBoard.length; i++) {
-  for (let j = 0; j < currentBoard.length - 3; j++) {
-    currentBoard[i][j] = 1;
-  }
-}
-
-currentBoard[0][0] = 1;
-currentBoard[3][0] = 0;
-
 export const game = () => {
   const adjacentCellsCount = countAdjacentCells(currentBoard);
   const nextBoardPanel = nextBoard(adjacentCellsCount, currentBoard);
-  console.table(currentBoard);
+  //console.table(currentBoard);
 
   currentBoard = nextBoardPanel.map((arr) => arr.slice());
 };
 
+// game();
 setInterval(() => {
   game();
-}, 500);
+}, 100);
