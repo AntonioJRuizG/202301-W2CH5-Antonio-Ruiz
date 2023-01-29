@@ -2,16 +2,8 @@ const colums = 10;
 const rows = 10;
 let currentBoard = [];
 
-export function setBoard(twoDimArray, colums, rows) {
-  for (let r = 0; r < rows; r++) {
-    const row = [];
-    for (let c = 0; c < colums; c++) {
-      row.push(0);
-    }
-
-    twoDimArray.push(row);
-  }
-
+export function setBoard(colums, rows) {
+  const twoDimArray = Array.from(Array(rows), () => new Array(colums).fill(0));
   return twoDimArray;
 }
 
@@ -78,16 +70,10 @@ export function countAdjacentCells(biDimArray) {
 }
 
 export function nextBoard(arrWithAdCellCalculated, currentBoard) {
-  const resultBoard = [];
-
-  for (let i = 0; i < arrWithAdCellCalculated.length; i++) {
-    const row = [];
-    for (let j = 0; j < arrWithAdCellCalculated[0].length; j++) {
-      row.push("");
-    }
-
-    resultBoard.push(row);
-  }
+  const resultBoard = Array.from(
+    Array(arrWithAdCellCalculated.length),
+    () => new Array(arrWithAdCellCalculated[0].length)
+  );
 
   for (let i = 0; i < resultBoard.length; i++) {
     for (let j = 0; j < resultBoard[0].length; j++) {
@@ -120,7 +106,7 @@ export function nextBoard(arrWithAdCellCalculated, currentBoard) {
   return resultBoard;
 }
 
-currentBoard = setBoard(currentBoard, colums, rows);
+currentBoard = setBoard(colums, rows);
 
 for (let i = 5; i < currentBoard.length; i++) {
   for (let j = 0; j < currentBoard.length - 3; j++) {
@@ -130,6 +116,7 @@ for (let i = 5; i < currentBoard.length; i++) {
 
 currentBoard[0][0] = 1;
 currentBoard[3][0] = 0;
+
 export const game = () => {
   const adjacentCellsCount = countAdjacentCells(currentBoard);
   const nextBoardPanel = nextBoard(adjacentCellsCount, currentBoard);
@@ -138,8 +125,6 @@ export const game = () => {
   currentBoard = nextBoardPanel.map((arr) => arr.slice());
 };
 
-game();
-
-/* SetInterval(() => {
+setInterval(() => {
   game();
-}, 500); */
+}, 500);
