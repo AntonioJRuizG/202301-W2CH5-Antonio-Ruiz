@@ -7,7 +7,8 @@
   "scripts": {
     "test": "jest --watchAll --coverage",
     "test:prod": "jest --watchAll --coverage --watchAll=false",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "sass": "sass sass:css --watch"
   },
   "author": "Antonio Jesus",
   "license": "ISC",
@@ -28,5 +29,8 @@
         ]
       }
     }
+  },
+  "dependencies": {
+    "sass": "^1.57.1"
   }
 }
