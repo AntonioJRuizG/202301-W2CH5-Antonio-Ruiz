@@ -7,6 +7,29 @@ export function setBoard(colums, rows) {
   return twoDimArray;
 }
 
+const boardDisplay = setBoard(colums, rows);
+function setBoardScreen(array) {
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array[0].length; j++) {
+      const cell = document.createElement("div");
+      cell.id = i.toString() + "-" + j.toString();
+      cell.classList.add("cell");
+      cell.addEventListener("click", liveCell);
+      document.querySelector(".board").append(cell);
+    }
+  }
+}
+
+function liveCell(currentBoard) {
+  let position = this.id;
+  position = position.split("-");
+  const r = position[0];
+  const c = position[1];
+  currentBoard[r][c] = 1;
+}
+
+setBoardScreen(boardDisplay);
+
 export function createAuxBoard(biDimArray) {
   if (biDimArray.length === 0) return false;
   const rows = biDimArray.length;
